@@ -54,7 +54,7 @@
             </nav>
 
             <div class="flex flex-col gap-3">
-                <h1 class="text-2xl md:text-3xl font-bold text-[#142F32] tracking-tight leading-snug">{{ $document->title }}</h1>
+                <h1 class="heading-display text-3xl md:text-4xl lg:text-5xl font-bold text-[#142F32] tracking-tight leading-snug">{{ $document->title }}</h1>
                 <p class="text-sm text-gray-600">
                     <span class="font-semibold text-gray-800">{{ $typeLabel }}</span>
                     <span class="mx-2 text-gray-300">•</span>
@@ -73,11 +73,12 @@
                     <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
                         <!-- Preview -->
                         <div class="mb-6">
-                            <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">Document Preview</h2>
+                            <h2 class="text-lg md:text-xl font-semibold text-[#142F32] mb-3">Document Preview</h2>
                             @php
                                 $publicUrl = null;
                                 try {
-                                    $publicUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($document->file_path);
+                                    // Use asset() helper for proper URL generation
+                                    $publicUrl = asset('storage/' . $document->file_path);
                                 } catch (\Throwable $e) {
                                     $publicUrl = null;
                                 }
@@ -87,8 +88,9 @@
                                 <div class="rounded-lg overflow-hidden border border-gray-200 bg-white">
                                     <iframe
                                         title="Preview: {{ $document->title }}"
-                                        src="{{ $publicUrl }}#toolbar=0&navpanes=0"
+                                        src="{{ route('documents.preview', $document->slug) }}#toolbar=0&navpanes=0"
                                         class="w-full h-[520px]"
+                                        type="application/pdf"
                                     ></iframe>
                                 </div>
                             @else
@@ -106,7 +108,7 @@
 
                         <!-- Description -->
                         <div class="mb-8">
-                            <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">Description</h2>
+                            <h2 class="text-lg md:text-xl font-semibold text-[#142F32] mb-2">Description</h2>
                             <p class="text-sm text-gray-700 leading-relaxed">
                                 {{ $document->description ?: '—' }}
                             </p>
@@ -139,7 +141,7 @@
 
                     <!-- Document Information -->
                     <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-                        <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wide mb-4">Document Information</h2>
+                        <h2 class="text-lg md:text-xl font-semibold text-[#142F32] mb-4">Document Information</h2>
                         <dl class="text-sm">
                             <div class="flex items-center justify-between py-2 border-b border-gray-100">
                                 <dt class="text-gray-600">Type</dt>

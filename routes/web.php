@@ -25,6 +25,7 @@ Route::get('/gallery/{slug}', [GalleryController::class, 'show'])->name('gallery
 // Documents Routes
 Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
 Route::get('/documents/{slug}', [DocumentController::class, 'show'])->name('documents.show');
+Route::get('/documents/{slug}/preview', [DocumentController::class, 'preview'])->name('documents.preview');
 Route::get('/documents/{slug}/download', [DocumentController::class, 'download'])->name('documents.download');
 
 // Contact Routes

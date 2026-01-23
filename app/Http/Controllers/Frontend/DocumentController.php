@@ -116,6 +116,26 @@ class DocumentController extends Controller
     }
 
     /**
+     * Preview a specific document by slug (for iframe display).
+     */
+    public function preview(string $slug)
+    {
+        $document = Document::where('slug', $slug)->firstOrFail();
+
+        if (!Storage::disk('public')->exists($document->file_path)) {
+            abort(404, 'File not found');
+        }
+
+        $filePath = Storage::disk('public')->path($document->file_path);
+        $mimeType = Storage::disk('public')->mimeType($document->file_path);
+
+        return response()->file($filePath, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'inline; filename="' . $document->file_name . '"',
+        ]);
+    }
+
+    /**
      * Download a specific document by slug.
      */
     public function download(string $slug)
