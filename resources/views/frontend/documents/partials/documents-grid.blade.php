@@ -33,10 +33,10 @@
             <article class="relative bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow card-lift">
                 <!-- Whole-card clickable overlay -->
                 <a href="{{ route('documents.show', $document->slug) }}"
-                   class="absolute inset-0 z-10 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5EDFFF] focus-visible:ring-offset-2"
+                   class="absolute inset-0 z-30 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5EDFFF] focus-visible:ring-offset-2"
                    aria-label="View document: {{ $document->title }}"></a>
 
-                <div class="relative z-20 p-5">
+                <div class="relative z-20 p-5 pointer-events-none">
                     <!-- Header row (icon + badge) -->
                     <div class="flex items-start justify-between gap-4 mb-4">
                         <div class="flex items-center gap-3 min-w-0">
@@ -65,7 +65,8 @@
 
                         <!-- Download (secondary, icon-only) -->
                         <a href="{{ route('documents.download', $document->slug) }}"
-                           class="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 bg-white text-[#142F32] hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5EDFFF] focus-visible:ring-offset-2"
+                           onclick="event.stopPropagation();"
+                           class="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 bg-white text-[#142F32] hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5EDFFF] focus-visible:ring-offset-2 pointer-events-auto relative z-40"
                            aria-label="Download {{ $document->title }}">
                             <i data-lucide="download" class="w-5 h-5"></i>
                         </a>
@@ -91,10 +92,12 @@
                     </div>
 
                     <!-- Actions -->
-                    <div class="mt-5 flex items-center gap-3">
-                        <span class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-[#142F32] text-white text-sm font-semibold shadow-sm">
+                    <div class="mt-5 flex items-center gap-3 pointer-events-auto relative z-40">
+                        <a href="{{ route('documents.show', $document->slug) }}" 
+                           onclick="event.stopPropagation(); window.location.href='{{ route('documents.show', $document->slug) }}'; return false;"
+                           class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-[#142F32] text-white text-sm font-semibold shadow-sm hover:bg-[#1a3f44] transition-colors cursor-pointer">
                             View
-                        </span>
+                        </a>
                         <span class="text-xs text-gray-500">Details & metadata</span>
                     </div>
                 </div>

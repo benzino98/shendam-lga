@@ -537,6 +537,8 @@ a[href]:hover {
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     opacity: 0;
+    pointer-events: none;
+    z-index: 1;
     transition: opacity 0.3s ease;
     pointer-events: none;
     z-index: 0;
@@ -545,6 +547,23 @@ a[href]:hover {
 .card-lift > * {
     position: relative;
     z-index: 1;
+}
+
+/* Override for document cards - ensure overlay link is clickable */
+.card-lift > a[aria-label*="View document"] {
+    z-index: 30 !important;
+    pointer-events: auto;
+}
+
+.card-lift > div.pointer-events-none {
+    pointer-events: none;
+}
+
+.card-lift > div.pointer-events-none > a.pointer-events-auto,
+.card-lift > div.pointer-events-none > div.pointer-events-auto > a {
+    pointer-events: auto;
+    z-index: 40;
+    position: relative;
 }
 
 .card-lift:hover::after {
