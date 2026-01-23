@@ -1,0 +1,1116 @@
+@import "tailwindcss";
+
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
+
+@theme {
+    /* Typography */
+    --font-sans: 'Inter', 'Manrope', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Clash Display', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    
+    /* Color Palette */
+    --color-primary: #142F32;
+    --color-accent-gold: #E0B973;
+    --color-accent-cyan: #5EDFFF;
+    --color-accent-emerald: #1a3f44;
+    
+    /* Custom Colors */
+    --color-primary-50: #f0f7f8;
+    --color-primary-100: #d9e8ea;
+    --color-primary-200: #b3d1d5;
+    --color-primary-300: #8dbac0;
+    --color-primary-400: #67a3ab;
+    --color-primary-500: #142F32;
+    --color-primary-600: #0f2528;
+    --color-primary-700: #0a1b1e;
+    --color-primary-800: #051114;
+    --color-primary-900: #00070a;
+}
+
+/* Custom Utility Classes */
+
+/* Glassmorphism */
+.glass-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.glass-card-dark {
+    background: rgba(20, 47, 50, 0.8);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Button Hover Effects - Enhanced */
+.btn-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-lift::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-lift:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-lift:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+}
+
+.btn-lift:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Button with gradient border effect */
+.btn-gradient-border {
+    position: relative;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+}
+
+.btn-gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(135deg, #5EDFFF, #E0B973);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-gradient-border:hover::before {
+    opacity: 1;
+}
+
+/* Section Overlap */
+.section-overlap {
+    margin-top: -80px;
+    padding-top: 120px;
+}
+
+/* Modern Section Dividers */
+.section-divider-modern {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    z-index: 10;
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+.section-divider-modern.flip {
+    transform: scaleY(-1);
+}
+
+.section-divider-modern svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    vertical-align: bottom;
+}
+
+/* Legacy support for old class names */
+.section-divider-wave,
+.section-divider-curve,
+.section-divider-slant {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    z-index: 10;
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+.section-divider-wave.flip,
+.section-divider-curve.flip,
+.section-divider-slant.flip {
+    transform: scaleY(-1);
+}
+
+.section-divider-wave svg,
+.section-divider-curve svg,
+.section-divider-slant svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    vertical-align: bottom;
+}
+
+/* Smooth Section Transitions */
+.section-transition {
+    position: relative;
+    overflow: hidden;
+}
+
+.section-transition::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(94, 223, 255, 0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.section-transition:hover::before {
+    opacity: 1;
+}
+
+/* Gradient Fade Between Sections */
+.section-fade-top {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    height: 100px;
+    margin-top: -100px;
+    position: relative;
+    z-index: 1;
+}
+
+.section-fade-bottom {
+    background: linear-gradient(to top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    height: 100px;
+    margin-bottom: -100px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Section Scroll Reveal Animations */
+section {
+    position: relative;
+}
+
+section.fade-in-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+section.fade-in-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Enhanced Section Transitions */
+.section-transition {
+    transition: all 0.3s ease;
+}
+
+/* Parallax Effect for Sections */
+.section-parallax {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Trust Elements Styling */
+.card-accent-border {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-accent-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-gold)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.card-accent-border:hover::before {
+    opacity: 1;
+}
+
+.card-glow {
+    position: relative;
+}
+
+.card-glow::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--color-accent-cyan), var(--color-accent-gold), var(--color-accent-cyan));
+    border-radius: inherit;
+    opacity: 0;
+    z-index: -1;
+    filter: blur(8px);
+    transition: opacity 0.3s ease;
+}
+
+.card-glow:hover::after {
+    opacity: 0.3;
+}
+
+/* Progress Bar Animation */
+.progress-bar {
+    transition: width 1s ease-out;
+}
+
+/* Chairman Portrait Styling */
+.chairman-portrait {
+    position: relative;
+    overflow: hidden;
+}
+
+.chairman-portrait::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(94, 223, 255, 0.1), rgba(224, 185, 115, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.chairman-portrait:hover::before {
+    opacity: 1;
+}
+
+/* Signature Logo Brand Element */
+.signature-logo {
+    position: relative;
+    display: inline-block;
+}
+
+.signature-logo::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    background: linear-gradient(45deg, var(--color-accent-cyan), var(--color-accent-gold), var(--color-accent-cyan));
+    border-radius: inherit;
+    opacity: 0;
+    z-index: -1;
+    filter: blur(8px);
+    transition: opacity 0.3s ease;
+    animation: gradient-rotate 3s linear infinite;
+    background-size: 200% 200%;
+}
+
+.signature-logo:hover::before {
+    opacity: 0.4;
+}
+
+@keyframes gradient-rotate {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Enhanced Link Hover Effects */
+a[href]:hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Signature Accent Underline */
+.signature-underline {
+    position: relative;
+    display: inline-block;
+}
+
+.signature-underline::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 3px;
+    bottom: -4px;
+    left: 0;
+    background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-gold));
+    border-radius: 2px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.signature-underline:hover::after,
+.signature-underline.active::after {
+    width: 100%;
+}
+
+/* Icon Pulse Animation */
+.icon-pulse {
+    animation: icon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes icon-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+/* Signature Gradient Text */
+.signature-gradient-text {
+    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Enhanced Card Signature Border */
+.card-signature-border {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-signature-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-gold), var(--color-accent-cyan));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.card-signature-border:hover::before {
+    opacity: 1;
+}
+
+/* Floating Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.float-animation {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Signature Glow Effect */
+.signature-glow {
+    position: relative;
+}
+
+.signature-glow::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, var(--color-accent-cyan), var(--color-accent-gold));
+    border-radius: inherit;
+    opacity: 0;
+    z-index: -1;
+    filter: blur(12px);
+    transition: opacity 0.3s ease;
+}
+
+.signature-glow:hover::after {
+    opacity: 0.5;
+}
+
+/* Enhanced Button Signature Style */
+.btn-signature {
+    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-gold));
+    color: white;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.btn-signature::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-accent-gold), var(--color-accent-cyan));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-signature:hover::before {
+    opacity: 1;
+}
+
+.btn-signature span {
+    position: relative;
+    z-index: 1;
+}
+
+/* Depth Layers */
+.depth-layer-1 {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.depth-layer-2 {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.depth-layer-3 {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.depth-layer-4 {
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+}
+
+.depth-layer-glass {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Hover Effects - Enhanced */
+.card-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.card-lift:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+}
+
+.card-lift::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(94, 223, 255, 0.3), rgba(224, 185, 115, 0.3));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.card-lift > * {
+    position: relative;
+    z-index: 1;
+}
+
+.card-lift:hover::after {
+    opacity: 1;
+}
+
+/* Typography Enhancements - Professional Government Grade */
+.heading-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    font-weight: 700;
+}
+
+.heading-display-2 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.heading-tight {
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+/* Typography Scale - Enhanced */
+h1, .h1 {
+    font-family: var(--font-display);
+    font-size: 4rem; /* 64px */
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+}
+
+h2, .h2 {
+    font-family: var(--font-display);
+    font-size: 2.5rem; /* 40px */
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+}
+
+h3, .h3 {
+    font-family: var(--font-display);
+    font-size: 1.875rem; /* 30px */
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+}
+
+h4, .h4 {
+    font-size: 1.5rem; /* 24px */
+    line-height: 1.4;
+    font-weight: 600;
+}
+
+h5, .h5 {
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.4;
+    font-weight: 600;
+}
+
+h6, .h6 {
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+/* Body text improvements */
+body {
+    font-family: var(--font-sans);
+    font-size: 1rem; /* 16px */
+    line-height: 1.6;
+    letter-spacing: 0;
+}
+
+p {
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+    h1, .h1 {
+        font-size: 2.5rem; /* 40px */
+    }
+    
+    h2, .h2 {
+        font-size: 2rem; /* 32px */
+    }
+    
+    h3, .h3 {
+        font-size: 1.5rem; /* 24px */
+    }
+}
+
+/* Text contrast improvements */
+.text-high-contrast {
+    color: #1a1a1a;
+}
+
+.text-medium-contrast {
+    color: #4a4a4a;
+}
+
+/* Section heading styles */
+.section-heading {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.section-subheading {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: #6b7280;
+    margin-bottom: 2rem;
+}
+
+/* Prose styling for content areas */
+.prose {
+    color: #374151;
+    line-height: 1.75;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    color: #142F32;
+}
+
+.prose h1 {
+    font-size: 2.25em;
+}
+
+.prose h2 {
+    font-size: 1.875em;
+}
+
+.prose h3 {
+    font-size: 1.5em;
+}
+
+.prose h4 {
+    font-size: 1.25em;
+}
+
+.prose p {
+    margin-bottom: 1.25em;
+    line-height: 1.75;
+}
+
+.prose a {
+    color: #142F32;
+    text-decoration: underline;
+    text-decoration-color: #5EDFFF;
+    transition: color 0.2s ease;
+}
+
+.prose a:hover {
+    color: #5EDFFF;
+}
+
+.prose strong {
+    font-weight: 600;
+    color: #142F32;
+}
+
+.prose ul,
+.prose ol {
+    margin-bottom: 1.25em;
+    padding-left: 1.625em;
+}
+
+.prose li {
+    margin-bottom: 0.5em;
+    line-height: 1.75;
+}
+
+.prose blockquote {
+    border-left: 4px solid #5EDFFF;
+    padding-left: 1em;
+    margin: 1.5em 0;
+    font-style: italic;
+    color: #6b7280;
+}
+
+/* Gradient Backgrounds */
+.gradient-mesh {
+    background: linear-gradient(135deg, #142F32 0%, #1a3f44 50%, #142F32 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.gradient-mesh::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(94, 223, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(224, 185, 115, 0.1) 0%, transparent 50%);
+    animation: gradient-shift 15s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Admin Dashboard - prevent global typography rules from blowing up headings */
+.admin-dashboard h1,
+.admin-dashboard .h1 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    font-family: var(--font-sans);
+}
+
+.admin-dashboard h2,
+.admin-dashboard .h2 {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    font-family: var(--font-sans);
+}
+
+.admin-dashboard h3,
+.admin-dashboard .h3 {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Animation Utilities - More Visible */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.slide-up {
+    transform: translateY(40px);
+    opacity: 0;
+    animation: slideUp 1s ease forwards;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Icon Animations - Enhanced */
+.icon-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-hover:hover {
+    transform: scale(1.15) rotate(5deg);
+}
+
+/* Icon pulse animation */
+.icon-pulse {
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Icon bounce on hover */
+.icon-bounce:hover {
+    animation: iconBounce 0.6s ease;
+}
+
+@keyframes iconBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Accent Border Animation */
+.accent-border {
+    position: relative;
+    overflow: hidden;
+}
+
+.accent-border::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #E0B973, #5EDFFF);
+    transition: width 0.3s ease;
+}
+
+.accent-border:hover::before {
+    width: 100%;
+}
+
+/* Navigation Link Underline Animation */
+.nav-link {
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #5EDFFF, #E0B973);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover::after,
+.nav-link.text-\[#5EDFFF\]::after {
+    width: 100%;
+}
+
+/* Active navigation state */
+.nav-link.text-\[#5EDFFF\] {
+    color: #5EDFFF !important;
+}
+
+/* Enhanced Card Accent Border */
+.card-accent-border {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-accent-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #5EDFFF, #E0B973);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.card-accent-border:hover::before {
+    width: 100%;
+}
+
+/* Card Border Glow on Hover */
+.card-glow {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-glow:hover {
+    border-color: rgba(94, 223, 255, 0.5);
+    box-shadow: 0 0 20px rgba(94, 223, 255, 0.2), 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Hero Section Enhancements - More Visible */
+.gradient-mesh {
+    position: relative;
+}
+
+.gradient-mesh::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(94, 223, 255, 0.25) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(224, 185, 115, 0.25) 0%, transparent 60%);
+    pointer-events: none;
+    animation: gradient-shift 20s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+/* Stat card icon animations - Enhanced */
+.glass-card:hover i,
+.card-lift:hover i {
+    transform: scale(1.2) rotate(5deg);
+    transition: transform 0.3s ease;
+}
+
+/* Group hover effects for icons */
+.group:hover .icon-hover {
+    transform: scale(1.15) rotate(5deg);
+}
+
+/* Smooth link transitions */
+a {
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+/* Image zoom on hover */
+img {
+    transition: transform 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.05);
+}
+
+/* Ensure statistics cards are visible */
+.gradient-mesh .glass-card,
+.gradient-mesh [class*="bg-white/10"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Statistics container visibility */
+.gradient-mesh .bg-white\/15 {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Statistics number visibility - Ensure colors are applied */
+.gradient-mesh .text-4xl,
+.gradient-mesh .text-5xl {
+    opacity: 1 !important;
+}
+
+/* Ensure counter colors are applied - Target by data-counter and data-suffix */
+.gradient-mesh [data-counter="100"],
+.gradient-mesh [data-counter="15"] {
+    color: #5EDFFF !important;
+}
+
+.gradient-mesh [data-counter="50"] {
+    color: #E0B973 !important;
+}
+
+/* Target spans with data-suffix to ensure color is applied */
+.gradient-mesh span[data-suffix="+"]:not([data-counter="50"]),
+.gradient-mesh span[data-suffix="+"]:not([data-counter]) {
+    color: #5EDFFF !important;
+}
+
+.gradient-mesh span[data-suffix="K+"] {
+    color: #E0B973 !important;
+}
+
+/* Ensure all stat numbers maintain their color */
+.gradient-mesh .text-4xl span,
+.gradient-mesh .text-5xl span {
+    color: inherit !important;
+}
+
+/* Statistics text visibility */
+.gradient-mesh .text-gray-200,
+.gradient-mesh .text-gray-300 {
+    opacity: 1 !important;
+    color: rgba(229, 231, 235, 0.9) !important;
+}
+
+/* Enhanced button hover effects */
+.btn-lift svg {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-lift:hover svg {
+    transform: translateX(4px);
+}
+
+/* Ensure CTA buttons are highly visible */
+.gradient-mesh .btn-lift {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    position: relative;
+    z-index: 20;
+}
+
+/* Primary button enhancement */
+.gradient-mesh .btn-lift.bg-white {
+    background: white !important;
+    color: #142F32 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+.gradient-mesh .btn-lift.bg-white:hover {
+    background: #f3f4f6 !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4) !important;
+    transform: translateY(-3px) !important;
+}
+
+/* Secondary button enhancement - Use attribute selector for Tailwind classes */
+.gradient-mesh .btn-lift:not(.bg-white) {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 2px solid white !important;
+    color: white !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+.gradient-mesh .btn-lift:not(.bg-white):hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+    border-color: #5EDFFF !important;
+    box-shadow: 0 12px 30px rgba(94, 223, 255, 0.3) !important;
+    transform: translateY(-3px) !important;
+}
