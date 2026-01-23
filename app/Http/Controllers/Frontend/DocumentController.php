@@ -93,6 +93,13 @@ class DocumentController extends Controller
             ->orderBy('name')
             ->get();
 
+        // If AJAX request, return only the documents grid partial
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'html' => view('frontend.documents.partials.documents-grid', compact('documents'))->render()
+            ]);
+        }
+
         return view('frontend.documents.index', compact('documents', 'categories'));
     }
 
