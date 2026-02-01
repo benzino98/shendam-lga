@@ -24,9 +24,10 @@ Route::get('/gallery/{slug}', [GalleryController::class, 'show'])->name('gallery
 
 // Documents Routes
 Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
-Route::get('/documents/{slug}', [DocumentController::class, 'show'])->name('documents.show');
+// More specific routes must come before the generic {slug} route
 Route::get('/documents/{slug}/preview', [DocumentController::class, 'preview'])->name('documents.preview');
 Route::get('/documents/{slug}/download', [DocumentController::class, 'download'])->name('documents.download');
+Route::get('/documents/{slug}', [DocumentController::class, 'show'])->name('documents.show');
 
 // Contact Routes
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');

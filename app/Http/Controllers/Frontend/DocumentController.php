@@ -127,11 +127,26 @@ class DocumentController extends Controller
         }
 
         $filePath = Storage::disk('public')->path($document->file_path);
-        $mimeType = Storage::disk('public')->mimeType($document->file_path);
+        
+        // Get MIME type, default to application/pdf if detection fails
+        try {
+            $mimeType = Storage::disk('public')->mimeType($document->file_path);
+            if (!$mimeType) {
+                $mimeType = 'application/pdf';
+            }
+        } catch (\Throwable $e) {
+            $mimeType = 'application/pdf';
+        }
+
+        // Ensure PDF files have correct MIME type
+        if (str_contains(strtolower((string) $document->file_type), 'pdf')) {
+            $mimeType = 'application/pdf';
+        }
 
         return response()->file($filePath, [
             'Content-Type' => $mimeType,
-            'Content-Disposition' => 'inline; filename="' . $document->file_name . '"',
+            'Content-Disposition' => 'inline; filename="' . addslashes($document->file_name) . '"',
+            'X-Content-Type-Options' => 'nosniff',
         ]);
     }
 

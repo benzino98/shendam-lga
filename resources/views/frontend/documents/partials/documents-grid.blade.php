@@ -94,7 +94,7 @@
                     <!-- Actions -->
                     <div class="mt-5 flex items-center gap-3 pointer-events-auto relative z-40">
                         <a href="{{ route('documents.show', $document->slug) }}" 
-                           onclick="event.stopPropagation(); window.location.href='{{ route('documents.show', $document->slug) }}'; return false;"
+                           onclick="event.stopPropagation();"
                            class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-[#142F32] text-white text-sm font-semibold shadow-sm hover:bg-[#1a3f44] transition-colors cursor-pointer">
                             View
                         </a>

@@ -88,9 +88,11 @@
                                 <div class="rounded-lg overflow-hidden border border-gray-200 bg-white">
                                     <iframe
                                         title="Preview: {{ $document->title }}"
-                                        src="{{ route('documents.preview', $document->slug) }}#toolbar=0&navpanes=0"
-                                        class="w-full h-[520px]"
-                                        type="application/pdf"
+                                        src="{{ route('documents.preview', $document->slug) }}"
+                                        class="w-full h-[520px] border-0"
+                                        frameborder="0"
+                                        allow="fullscreen"
+                                        loading="lazy"
                                     ></iframe>
                                 </div>
                             @else
