@@ -128,14 +128,16 @@
                 <div class="fade-in-on-scroll order-2 lg:order-1">
                     <div class="relative">
                         <div class="glass-card bg-gradient-to-br from-[#142F32] to-[#1a3f44] rounded-2xl p-8 border-2 border-white/50 depth-layer-4 overflow-hidden">
-                            <!-- Placeholder for Chairman's portrait -->
-                            <div class="aspect-square rounded-xl bg-gradient-to-br from-[#142F32]/80 to-[#1a3f44]/80 flex items-center justify-center relative overflow-hidden">
-                                <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="400" height="400" xmlns="http://www.w3.org/2000/svg"%3E%3Crect width="400" height="400" fill="%23142F32"/%3E%3Ctext x="50%25" y="50%25" font-size="48" fill="%23ffffff" text-anchor="middle" dominant-baseline="middle" font-family="Arial"%3EChairman%3C/text%3E%3C/svg%3E')] bg-cover bg-center"></div>
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                                <div class="relative z-10 text-center text-white">
-                                    <i data-lucide="user-circle" class="w-32 h-32 mx-auto mb-4 opacity-50"></i>
-                                    <p class="text-sm opacity-75">Portrait Placeholder</p>
-                                </div>
+                            <!-- Chairman's portrait -->
+                            <div class="aspect-square rounded-xl relative overflow-hidden pt-6">
+                                <img 
+                                    src="{{ asset('Hon Chairman.jpg.jpeg') }}" 
+                                    alt="Executive Chairman - Shendam Local Government Area"
+                                    class="w-full h-full object-cover"
+                                    style="object-position: center top;"
+                                    loading="lazy"
+                                />
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                             </div>
                             <!-- Decorative elements -->
                             <div class="absolute -top-4 -right-4 w-24 h-24 bg-[#5EDFFF]/20 rounded-full blur-2xl"></div>
@@ -217,50 +219,101 @@
     <!-- Curve Divider -->
     <x-section-divider type="curve" color="#ffffff" />
 
-    <!-- Statistics Section - Enhanced with Glassmorphism -->
-    <section class="py-16 bg-gradient-to-b from-gray-50 to-white section-overlap section-transition">
+    <!-- Quick Access Section - Modern Navigation Cards -->
+    <section class="py-20 bg-gradient-to-b from-gray-50 to-white section-overlap section-transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 fade-in-on-scroll">
-                <div class="glass-card bg-white/80 backdrop-blur-md rounded-xl p-8 border-2 border-white/50 depth-layer-3 card-lift card-accent-border card-glow group">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-[#142F32]/10 rounded-lg flex items-center justify-center icon-hover group-hover:bg-[#142F32]/20 transition-colors">
-                            <i data-lucide="users" class="w-6 h-6 text-[#142F32]"></i>
-                        </div>
-                    </div>
-                    <div class="text-4xl lg:text-5xl font-bold text-[#142F32] mb-2">100+</div>
-                    <div class="text-gray-700 font-medium">Our Esteemed Partners</div>
-                </div>
+            <div class="text-center mb-12 slide-up-on-scroll">
+                <h2 class="heading-display text-3xl md:text-4xl lg:text-5xl font-bold text-[#142F32] mb-4">
+                    Quick <span class="signature-gradient-text">Access</span>
+                </h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Navigate to key sections and resources with ease
+                </p>
+            </div>
 
-                <div class="glass-card bg-white/80 backdrop-blur-md rounded-xl p-8 border-2 border-white/50 depth-layer-3 card-lift card-accent-border card-glow group">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center icon-hover group-hover:bg-green-200 transition-colors">
-                            <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-on-scroll">
+                @foreach([
+                    [
+                        'route' => route('posts.index'),
+                        'icon' => 'newspaper',
+                        'title' => 'News & Updates',
+                        'description' => 'Stay informed with latest announcements and developments',
+                        'color' => 'blue',
+                        'gradient' => 'from-blue-500 to-cyan-500'
+                    ],
+                    [
+                        'route' => route('gallery.index'),
+                        'icon' => 'images',
+                        'title' => 'Photo Gallery',
+                        'description' => 'Explore our collection of photos and visual stories',
+                        'color' => 'purple',
+                        'gradient' => 'from-purple-500 to-pink-500'
+                    ],
+                    [
+                        'route' => route('documents.index'),
+                        'icon' => 'file-text',
+                        'title' => 'Documents',
+                        'description' => 'Access official documents, reports, and publications',
+                        'color' => 'green',
+                        'gradient' => 'from-green-500 to-emerald-500'
+                    ],
+                    [
+                        'route' => route('about'),
+                        'icon' => 'info',
+                        'title' => 'About Us',
+                        'description' => 'Learn about our history, culture, and governance',
+                        'color' => 'amber',
+                        'gradient' => 'from-amber-500 to-orange-500'
+                    ],
+                    [
+                        'route' => route('contact'),
+                        'icon' => 'mail',
+                        'title' => 'Contact Us',
+                        'description' => 'Get in touch with our team and departments',
+                        'color' => 'indigo',
+                        'gradient' => 'from-indigo-500 to-blue-500'
+                    ],
+                    [
+                        'route' => route('documents.index', ['type' => 'budget']),
+                        'icon' => 'wallet',
+                        'title' => 'Budget & Finance',
+                        'description' => 'View budget allocations and financial reports',
+                        'color' => 'teal',
+                        'gradient' => 'from-teal-500 to-cyan-500'
+                    ],
+                ] as $index => $link)
+                <a href="{{ $link['route'] }}" 
+                   class="glass-card bg-white/90 backdrop-blur-md rounded-xl p-6 border-2 border-white/50 depth-layer-3 card-lift card-accent-border card-glow group stagger-item relative overflow-hidden block">
+                    <!-- Animated gradient background on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-br {{ $link['gradient'] }} opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
+                    
+                    <!-- Icon with animated background -->
+                    <div class="relative z-10 mb-4">
+                        <div class="w-14 h-14 bg-gradient-to-br {{ $link['gradient'] }} rounded-xl flex items-center justify-center icon-hover group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                            <i data-lucide="{{ $link['icon'] }}" class="w-7 h-7 text-white"></i>
                         </div>
                     </div>
-                    <div class="text-4xl lg:text-5xl font-bold text-[#142F32] mb-2">1951+</div>
-                    <div class="text-gray-700 font-medium">Total Projects</div>
-                    <div class="text-sm text-green-600 mt-1 font-semibold">↑ Increase of 128 this month</div>
-                </div>
-
-                <div class="glass-card bg-white/80 backdrop-blur-md rounded-xl p-8 border-2 border-white/50 depth-layer-3 card-lift card-accent-border card-glow group">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center icon-hover group-hover:bg-blue-200 transition-colors">
-                            <i data-lucide="clock" class="w-6 h-6 text-blue-600"></i>
+                    
+                    <!-- Content -->
+                    <div class="relative z-10">
+                        <h3 class="heading-display-2 text-xl font-bold text-[#142F32] mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r {{ $link['gradient'] }} transition-all duration-300">
+                            {{ $link['title'] }}
+                        </h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                            {{ $link['description'] }}
+                        </p>
+                        
+                        <!-- Arrow indicator -->
+                        <div class="flex items-center text-[#142F32] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r {{ $link['gradient'] }} transition-all duration-300">
+                            <span class="text-sm font-semibold mr-2">Explore</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-2"></i>
                         </div>
                     </div>
-                    <div class="text-4xl lg:text-5xl font-bold text-[#142F32] mb-2">6+</div>
-                    <div class="text-gray-700 font-medium">Years of Service</div>
-                </div>
-
-                <div class="glass-card-dark bg-[#142F32]/90 backdrop-blur-md rounded-xl p-8 border-2 border-white/30 depth-layer-4 card-lift card-accent-border card-glow group text-white">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center icon-hover group-hover:bg-white/30 transition-colors">
-                            <i data-lucide="zap" class="w-6 h-6 text-white"></i>
-                        </div>
-                    </div>
-                    <div class="text-4xl lg:text-5xl font-bold mb-2">Efficiency</div>
-                    <div class="text-gray-200">Optimal Performance & Productivity</div>
-                </div>
+                    
+                    <!-- Decorative corner element -->
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br {{ $link['gradient'] }} opacity-0 group-hover:opacity-10 rounded-bl-full transition-opacity duration-500"></div>
+                </a>
+                @endforeach
             </div>
         </div>
     </section>
