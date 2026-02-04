@@ -3,6 +3,11 @@
 .env
 .env.backup
 .env.production
+.env.local
+# Keep example files
+!.env.example
+!env.local.example
+!env.production.example
 .phpactor.json
 .phpunit.result.cache
 /.fleet
@@ -22,3 +27,32 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Database files
+/database/database.sqlite
+/database/*.sqlite
+
+# Internal documentation and progress tracking
+*_COMPLETION.md
+*_PROGRESS.md
+*_SUMMARY.md
+DESIGN_UPGRADE*.md
+PROJECT_SPECIFICATION.md
+SETUP_*.md
+DEPLOYMENT.md
+GITHUB_SECRETS_SETUP.md
+README_DEPLOYMENT.md
+
+# Deployment scripts (server-specific)
+deploy.sh
+deploy-local.sh
+
+# CI/CD workflows (uncomment the line below if you don't want GitHub Actions)
+/.github/workflows/
+
+# Temporary and dummy files
+dummy
+*.tmp
+*.bak
+*.swp
+*~
