@@ -34,35 +34,46 @@
                     <div class="glass-card p-8 card-lift">
                         <h2 class="heading-display-2 text-3xl font-bold text-[#142F32] mb-6">Welcome to Shendam LGA</h2>
                         <div class="space-y-4 text-gray-700 leading-relaxed">
-                            <p class="text-lg">
-                                <strong class="text-[#142F32]">Shendam Local Government Area</strong> is one of the largest and most historic local government areas in Plateau State, Nigeria.
+                            <p class="text-lg font-semibold text-[#142F32]">
+                                SHENDAM LOCAL GOVERNMENT AREA AT A GLANCE
                             </p>
+
                             <p>
-                                Home to diverse peoples, vibrant culture, and a growing economy, Shendam LGA stands as a beacon of progress and unity in the heart of Plateau State.
+                                <strong class="text-[#142F32]">1. Location:</strong>
+                                Created in 1976, Shendam – popularly referred to as the <span class="italic">Home of Hospitality</span> – is situated about 155km south of Jos, the headquarters of Plateau State. It covers a land mass of about 2,437 sq km and has a population of about 208,017 made up of 109,519 males and 97,498 females as recorded in the 2006 Population Census.
                             </p>
-                            <div class="pt-4 space-y-3">
-                                <div class="flex items-start space-x-3">
-                                    <i data-lucide="map-pin" class="w-5 h-5 text-[#5EDFFF] mt-1 flex-shrink-0"></i>
-                                    <div>
-                                        <strong class="text-[#142F32]">Location:</strong>
-                                        <p class="text-gray-600">Plateau State, North Central Nigeria</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3">
-                                    <i data-lucide="users" class="w-5 h-5 text-[#E0B973] mt-1 flex-shrink-0"></i>
-                                    <div>
-                                        <strong class="text-[#142F32]">People:</strong>
-                                        <p class="text-gray-600">Diverse ethnic groups living in harmony</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3">
-                                    <i data-lucide="mountain" class="w-5 h-5 text-[#5EDFFF] mt-1 flex-shrink-0"></i>
-                                    <div>
-                                        <strong class="text-[#142F32]">Heritage:</strong>
-                                        <p class="text-gray-600">Rich cultural traditions and natural beauty</p>
-                                    </div>
-                                </div>
-                            </div>
+
+                            <p>
+                                The Local Government Area shares common boundaries with Quan-pan LGA to the west, Mikang LGA to the south and Langtang South LGA to the east. It is a belt of low-lying land and is thickly covered with economic trees. It is traversed by many streams and rivers which can be utilised effectively for fishing, agriculture and transportation.
+                            </p>
+
+                            <p>
+                                Shendam experiences relatively high temperatures during the day and low temperatures at night. The hot and humid weather condition, coupled with generally fertile soil, enhances the growth of cash crops such as yams, rice, millet, beans, cassava and others.
+                            </p>
+
+                            <p>
+                                Apart from these crops, the Local Government Area is also blessed with abundant mineral resources such as salt, gypsum, clay, sand and hard rock, deposited around areas including Dertang Jayu, Duam, Japhshen Tengzet and Dungoeshing. These mineral resources abound in large quantities, waiting to be tapped by potential investors.
+                            </p>
+
+                            <p>
+                                Tourist attraction centres found in the area include Npol Lake in Lakushi, Jelbang Rock, Nroam Lake, Shendam Dam, Gonvel, Goesa and Kaanjen ponds.
+                            </p>
+
+                            <p>
+                                The area is inhabited by the Goemai whose predominant occupations are farming, fishing and rearing of livestock. Because of the peaceful and hospitable nature of the Goemai, other ethnic groups such as Mpun, Kwalla, Berom, Mushere, Hausa, Fulani, Igbo, Yoruba and many others also settle peacefully with them.
+                            </p>
+
+                            <p>
+                                For administrative convenience, the area is divided into four districts, each headed by a district head. Shendam District is headed by Miskoom Leonard Shaiyen; Derteng District is headed by Miskoom Nijin Yunkwap; Dokan Tofa is headed by Miskoom James Laankwap; while Dorok District is headed by an acting head, Miskoom Prinkwap Maigari.
+                            </p>
+
+                            <p>
+                                The entire Goemai nation is headed by a first-class chief, Miskoom Hubert Shaldas II (OON), who is also the Deputy Chairman, Plateau State Council of Chiefs.
+                            </p>
+
+                            <p>
+                                The Local Government Area enjoys the network services of MTN, GLO and Zain, and has other social amenities such as good road networks and a modern post office. The area also enjoys the services of banks such as UBA and Agricultural and Co‑operative Banks, while Ocean Bank has already concluded arrangements to commence full-fledged banking activities.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -344,7 +355,7 @@
                     </div>
                     <h3 class="heading-display-2 text-2xl font-bold text-[#142F32] mb-4">Our Mission</h3>
                     <p class="text-gray-600 leading-relaxed">
-                        To provide transparent, efficient, and people-centered governance that promotes sustainable development, social justice, and improved quality of life for all residents of Shendam Local Government Area.
+                        To develop a sound Infrastructure base, while providing an enabling environment for peaceful coexistence for Shendam LGA in the shortest time possible.
                     </p>
                 </div>
 
@@ -355,8 +366,7 @@
                     </div>
                     <h3 class="heading-display-2 text-2xl font-bold text-[#142F32] mb-4">Our Vision</h3>
                     <p class="text-gray-600 leading-relaxed">
-                        To be a model local government area known for excellence in governance, community participation, economic prosperity, and social harmony, where every citizen has the opportunity to thrive.
-                    </p>
+                        To buld an egalitatrian viable, peacful and just Local Government Area where inhabitants are economically and politically empowered and their value system redefined with the present reality poised to face the challenges of tommorrow.
                 </div>
             </div>
 
