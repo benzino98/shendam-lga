@@ -32,16 +32,9 @@ Thumbs.db
 /database/database.sqlite
 /database/*.sqlite
 
-# Internal documentation and progress tracking
-*_COMPLETION.md
-*_PROGRESS.md
-*_SUMMARY.md
-DESIGN_UPGRADE*.md
-PROJECT_SPECIFICATION.md
-SETUP_*.md
-DEPLOYMENT.md
-GITHUB_SECRETS_SETUP.md
-README_DEPLOYMENT.md
+# Internal documentation - exclude all .md files except README.md
+*.md
+!README.md
 
 # Deployment scripts (server-specific)
 deploy.sh
