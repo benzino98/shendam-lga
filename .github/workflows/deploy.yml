@@ -123,23 +123,39 @@ jobs:
             echo "${{ secrets.SERVER_SSH_PASSPHRASE }}" > ~/.ssh/deploy_key_passphrase
           fi
 
-      - name: Transfer files via SCP
+      - name: Transfer files via SSH (base64)
         run: |
           ssh-keyscan -p ${{ secrets.SERVER_PORT || 22 }} ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
-          scp -i ~/.ssh/deploy_key \
-              -P ${{ secrets.SERVER_PORT || 22 }} \
-              -q \
-              -T \
+          echo "Encoding and transferring deployment archive..."
+          base64 -w 0 deployment.tar.gz | ssh -i ~/.ssh/deploy_key \
+              -p ${{ secrets.SERVER_PORT || 22 }} \
               -o StrictHostKeyChecking=no \
               -o UserKnownHostsFile=~/.ssh/known_hosts \
               -o LogLevel=ERROR \
               -o BatchMode=yes \
               -o ConnectTimeout=30 \
-              deployment.tar.gz deploy.sh \
-              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/ || \
-          rsync -avz -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.SERVER_PORT || 22 }} -o StrictHostKeyChecking=no -o LogLevel=ERROR" \
-              deployment.tar.gz deploy.sh \
-              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+              "mkdir -p /tmp && base64 -d > /tmp/deployment.tar.gz"
+          
+          echo "Encoding and transferring deploy script..."
+          base64 -w 0 deploy.sh | ssh -i ~/.ssh/deploy_key \
+              -p ${{ secrets.SERVER_PORT || 22 }} \
+              -o StrictHostKeyChecking=no \
+              -o UserKnownHostsFile=~/.ssh/known_hosts \
+              -o LogLevel=ERROR \
+              -o BatchMode=yes \
+              -o ConnectTimeout=30 \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+              "base64 -d > /tmp/deploy.sh && chmod +x /tmp/deploy.sh"
+          
+          echo "Verifying files were transferred..."
+          ssh -i ~/.ssh/deploy_key \
+              -p ${{ secrets.SERVER_PORT || 22 }} \
+              -o StrictHostKeyChecking=no \
+              -o LogLevel=ERROR \
+              -o BatchMode=yes \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+              "ls -lh /tmp/deployment.tar.gz /tmp/deploy.sh"
 
       - name: Execute deployment script
         uses: appleboy/ssh-action@v1.0.3
