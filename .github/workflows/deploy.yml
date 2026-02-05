@@ -128,8 +128,16 @@ jobs:
           ssh-keyscan -p ${{ secrets.SERVER_PORT || 22 }} ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
           scp -i ~/.ssh/deploy_key \
               -P ${{ secrets.SERVER_PORT || 22 }} \
+              -q \
+              -T \
               -o StrictHostKeyChecking=no \
               -o UserKnownHostsFile=~/.ssh/known_hosts \
+              -o LogLevel=ERROR \
+              -o BatchMode=yes \
+              -o ConnectTimeout=30 \
+              deployment.tar.gz deploy.sh \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/ || \
+          rsync -avz -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.SERVER_PORT || 22 }} -o StrictHostKeyChecking=no -o LogLevel=ERROR" \
               deployment.tar.gz deploy.sh \
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/
 
