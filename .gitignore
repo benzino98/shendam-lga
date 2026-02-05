@@ -37,11 +37,8 @@ Thumbs.db
 !README.md
 
 # Deployment scripts (server-specific)
-deploy.sh
 deploy-local.sh
-
-# CI/CD workflows (uncomment the line below if you don't want GitHub Actions)
-/.github/workflows/
+server-setup.sh
 
 # Temporary and dummy files
 dummy
