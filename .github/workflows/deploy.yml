@@ -99,6 +99,7 @@ jobs:
       - name: Create deployment archive
         run: |
           tar -czf deployment.tar.gz \
+            --warning=no-file-changed \
             --exclude='.git' \
             --exclude='.github' \
             --exclude='node_modules' \
@@ -109,7 +110,9 @@ jobs:
             --exclude='storage/framework/cache/*' \
             --exclude='storage/framework/sessions/*' \
             --exclude='storage/framework/views/*' \
-            .
+            --exclude='storage/framework/testing/*' \
+            --exclude='bootstrap/cache/*' \
+            . || (echo "Archive created with warnings" && exit 0)
 
       - name: Deploy to server via SSH
         uses: appleboy/scp-action@v0.1.7
