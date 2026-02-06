@@ -113,7 +113,10 @@ jobs:
           protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
           port: ${{ secrets.FTP_PORT || 21 }}
           local-dir: ./
-          server-dir: ${{ secrets.DEPLOY_PATH || '/home/shendam/public_html/' }}
+          # IMPORTANT: this path is relative to your FTP root and MUST end with a slash.
+          # For most cPanel setups the root you see after login contains `public_html`,
+          # so this will deploy into /home/shendam/public_html on the server.
+          server-dir: /public_html/
           # Keep env and storage on the server; don't upload node_modules, tests, or VCS files
           exclude: |
             **/.git*
