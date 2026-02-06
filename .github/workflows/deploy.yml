@@ -97,14 +97,12 @@ jobs:
         run: npm run build
 
       # Deploy using FTP/SFTP because shell access (SSH) is disabled on the server.
-      # Configure the following secrets in your repository:
-      # - FTP_HOST
-      # - FTP_USERNAME
-      # - FTP_PASSWORD
-      # Optional:
-      # - FTP_PORT (defaults to 21)
-      # - FTP_PROTOCOL (ftp, ftps, or sftp - depends on your hosting)
-      - name: Deploy via FTP/SFTP
+      # We split deployment into TWO parts so that:
+      #  - Laravel core lives OUTSIDE public_html  => /home/shendam/laravel
+      #  - Only the contents of /public are uploaded into public_html
+
+      # 1) Deploy Laravel core to /home/shendam/laravel
+      - name: Deploy core app via FTP/SFTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -113,21 +111,46 @@ jobs:
           protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
           port: ${{ secrets.FTP_PORT || 21 }}
           local-dir: ./
-          # IMPORTANT: this path is relative to your FTP root and MUST end with a slash.
-          # For most cPanel setups the root you see after login contains `public_html`,
-          # so this will deploy into /home/shendam/public_html on the server.
-          server-dir: /public_html/
-          # Keep env and storage on the server; don't upload node_modules, tests, or VCS files
+          # This is relative to your FTP root (/home/shendam)
+          # and will result in the app being stored at /home/shendam/laravel
+          server-dir: /laravel/
           exclude: |
             **/.git*
             **/.github/**
             **/node_modules/**
             **/tests/**
-            **/storage/**
             .env
             env.local*
             env.production*
+            **/storage/logs/**
+            **/storage/framework/cache/**
+            **/storage/framework/sessions/**
+            **/storage/framework/views/**
+            **/storage/framework/testing/**
             **/bootstrap/cache/**
+          # Make the connection more stable on shared hosting
+          max-conn: 1
+          timeout: 600000
+          retry-count: 3
+
+      # 2) Deploy ONLY public assets to public_html (web root)
+      - name: Deploy public assets via FTP/SFTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
+          port: ${{ secrets.FTP_PORT || 21 }}
+          local-dir: ./public/
+          # This maps directly to /home/shendam/public_html on the server
+          server-dir: /public_html/
+          exclude: |
+            **/.git*
+            **/.github/**
+          max-conn: 1
+          timeout: 600000
+          retry-count: 3
 
       - name: Notify deployment status
         if: always()
