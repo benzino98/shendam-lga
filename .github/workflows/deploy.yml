@@ -100,7 +100,25 @@ jobs:
       # This approach uploads 2 compressed files instead of thousands of individual files
       - name: Create deployment archives
         run: |
-          # Create archive for Laravel core (everything except public folder)
+          set -e
+
+          echo "Current working directory:"
+          pwd
+          echo "Top-level contents:"
+          ls -la
+
+          # Sanity‑check that this is a Laravel root and that public exists
+          if [ ! -f "artisan" ]; then
+            echo "ERROR: artisan not found in current directory. Are we in the Laravel project root?"
+            exit 1
+          fi
+
+          if [ ! -d "public" ]; then
+            echo "ERROR: public directory not found."
+            exit 1
+          fi
+
+          echo "Creating laravel-core.tar.gz ..."
           tar -czf laravel-core.tar.gz \
             --exclude='.git' \
             --exclude='.github' \
@@ -118,8 +136,8 @@ jobs:
             --exclude='public' \
             --warning=no-file-changed \
             .
-          
-          # Create archive for public assets only
+
+          echo "Creating public-assets.tar.gz ..."
           tar -czf public-assets.tar.gz \
             --warning=no-file-changed \
             -C public .
@@ -131,8 +149,8 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
-          port: ${{ secrets.FTP_PORT || 21 }}
+          protocol: ftp
+          port: 21
           local-dir: ./
           server-dir: /laravel/
           include: |
@@ -147,8 +165,8 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
-          port: ${{ secrets.FTP_PORT || 21 }}
+          protocol: ftp
+          port: 21
           local-dir: ./
           server-dir: /public_html/
           include: |
