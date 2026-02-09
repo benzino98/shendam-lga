@@ -1,16 +1,10 @@
 <?php
 /**
- * Lightweight deployment helper for cPanel when SSH is disabled.
+ * Deployment script for cPanel when SSH is disabled.
  *
- * This script is meant to be run AFTER your GitHub Actions workflow
- * has uploaded the latest code to the server via FTP/SFTP.
- *
- * It simply runs the key Laravel Artisan commands on the server:
- *  - php artisan migrate --force
- *  - php artisan config:cache
- *  - php artisan route:cache
- *  - php artisan view:cache
- *  - php artisan event:cache
+ * This script handles:
+ * 1. Extracting deployment archives uploaded by GitHub Actions
+ * 2. Running Laravel Artisan commands (migrate, cache, etc.)
  *
  * IMPORTANT SECURITY NOTES
  * ------------------------
@@ -35,9 +29,16 @@ $secretToken = getenv('DEPLOY_TOKEN') ?: 'CHANGE_ME_DEPLOY_TOKEN';
 //    specific path, set DEPLOY_PHP_BIN in .env or change this default.
 $phpBinary = getenv('DEPLOY_PHP_BIN') ?: 'php';
 
+// 3) Paths
+$laravelRoot = realpath(__DIR__ . '/../laravel') ?: __DIR__ . '/../laravel';
+$publicHtml = __DIR__;
+$coreArchive = $laravelRoot . '/laravel-core.tar.gz';
+$publicArchive = $publicHtml . '/public-assets.tar.gz';
+
 // ==== SECURITY CHECK ========================================================
 
 $providedToken = $_GET['token'] ?? $_SERVER['HTTP_X_DEPLOY_TOKEN'] ?? '';
+$action = $_GET['action'] ?? 'deploy';
 
 if (!$secretToken || $secretToken === 'CHANGE_ME_DEPLOY_TOKEN') {
     http_response_code(500);
@@ -102,14 +103,88 @@ function runCommand(string $title, string $command, string $cwd): void
 
 echo "Laravel deployment helper\n";
 echo "Started at: " . date('Y-m-d H:i:s') . "\n";
-echo "Project root: {$projectRoot}\n\n";
+echo "Laravel root: {$laravelRoot}\n";
+echo "Public HTML: {$publicHtml}\n\n";
 
-// Optional: uncomment this if you ever need to generate the app key on the server
-// (ONLY run once, when .env is correctly configured and APP_KEY is empty).
-// runCommand('Generate application key', "{$phpBinary} artisan key:generate", $projectRoot);
+// ==== EXTRACT ARCHIVES (if action is 'extract' or 'deploy') ===============
 
-// 1) Run database migrations
-runCommand('Run database migrations', "{$phpBinary} artisan migrate --force", $projectRoot);
+if ($action === 'extract' || $action === 'deploy') {
+    echo "============================================================\n";
+    echo "STEP 1: Extracting deployment archives\n";
+    echo "============================================================\n\n";
+    
+    // Extract Laravel core
+    if (file_exists($coreArchive)) {
+        echo "Extracting Laravel core archive...\n";
+        if (!is_dir($laravelRoot)) {
+            mkdir($laravelRoot, 0755, true);
+        }
+        
+        $cmd = "cd " . escapeshellarg($laravelRoot) . " && tar -xzf " . escapeshellarg($coreArchive) . " 2>&1";
+        $output = [];
+        $exitCode = 0;
+        exec($cmd, $output, $exitCode);
+        
+        if ($exitCode === 0) {
+            echo "✓ Laravel core extracted to: {$laravelRoot}\n";
+            echo implode("\n", $output) . "\n\n";
+            
+            // Clean up archive
+            unlink($coreArchive);
+            echo "✓ Cleaned up core archive\n\n";
+        } else {
+            echo "!!! ERROR: Failed to extract core archive\n";
+            echo implode("\n", $output) . "\n\n";
+            exit(1);
+        }
+    } else {
+        echo "⚠ Core archive not found: {$coreArchive}\n";
+        echo "  (This is normal if archives haven't been uploaded yet)\n\n";
+    }
+    
+    // Extract public assets
+    if (file_exists($publicArchive)) {
+        echo "Extracting public assets archive...\n";
+        $cmd = "cd " . escapeshellarg($publicHtml) . " && tar -xzf " . escapeshellarg($publicArchive) . " 2>&1";
+        $output = [];
+        $exitCode = 0;
+        exec($cmd, $output, $exitCode);
+        
+        if ($exitCode === 0) {
+            echo "✓ Public assets extracted to: {$publicHtml}\n";
+            echo implode("\n", $output) . "\n\n";
+            
+            // Clean up archive
+            unlink($publicArchive);
+            echo "✓ Cleaned up public archive\n\n";
+        } else {
+            echo "!!! ERROR: Failed to extract public archive\n";
+            echo implode("\n", $output) . "\n\n";
+            exit(1);
+        }
+    } else {
+        echo "⚠ Public archive not found: {$publicArchive}\n";
+        echo "  (This is normal if archives haven't been uploaded yet)\n\n";
+    }
+}
+
+// ==== RUN ARTISAN COMMANDS ==================================================
+
+if ($action === 'deploy' || $action === 'commands') {
+    $projectRoot = $laravelRoot;
+    
+    if (!is_dir($projectRoot) || !file_exists($projectRoot . '/artisan')) {
+        echo "!!! ERROR: Laravel root not found at: {$projectRoot}\n";
+        echo "   Please ensure the core archive has been extracted first.\n";
+        exit(1);
+    }
+    
+    // Optional: uncomment this if you ever need to generate the app key on the server
+    // (ONLY run once, when .env is correctly configured and APP_KEY is empty).
+    // runCommand('Generate application key', "{$phpBinary} artisan key:generate", $projectRoot);
+    
+    // 1) Run database migrations
+    runCommand('Run database migrations', "{$phpBinary} artisan migrate --force", $projectRoot);
 
 // 2) Clear existing caches
 runCommand('Clear application cache', "{$phpBinary} artisan cache:clear", $projectRoot);
@@ -123,8 +198,16 @@ runCommand('Cache routes', "{$phpBinary} artisan route:cache", $projectRoot);
 runCommand('Cache views', "{$phpBinary} artisan view:cache", $projectRoot);
 runCommand('Cache events', "{$phpBinary} artisan event:cache", $projectRoot);
 
-echo "============================================================\n";
-echo "Deployment commands completed successfully.\n";
-echo "Finished at: " . date('Y-m-d H:i:s') . "\n";
-echo "============================================================\n";
+    echo "============================================================\n";
+    echo "Deployment commands completed successfully.\n";
+    echo "Finished at: " . date('Y-m-d H:i:s') . "\n";
+    echo "============================================================\n";
+} else {
+    echo "============================================================\n";
+    echo "Extraction completed.\n";
+    echo "To run artisan commands, visit: ?token=YOUR_TOKEN&action=commands\n";
+    echo "Or use: ?token=YOUR_TOKEN&action=deploy (extract + commands)\n";
+    echo "Finished at: " . date('Y-m-d H:i:s') . "\n";
+    echo "============================================================\n";
+}
 

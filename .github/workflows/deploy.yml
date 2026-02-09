@@ -96,13 +96,36 @@ jobs:
       - name: Build Production Assets
         run: npm run build
 
-      # Deploy using FTP/SFTP because shell access (SSH) is disabled on the server.
-      # We split deployment into TWO parts so that:
-      #  - Laravel core lives OUTSIDE public_html  => /home/shendam/laravel
-      #  - Only the contents of /public are uploaded into public_html
+      # Create deployment archives to avoid FTP connection timeouts
+      # This approach uploads 2 compressed files instead of thousands of individual files
+      - name: Create deployment archives
+        run: |
+          # Create archive for Laravel core (everything except public folder)
+          tar -czf laravel-core.tar.gz \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            --exclude='tests' \
+            --exclude='.env' \
+            --exclude='env.local*' \
+            --exclude='env.production*' \
+            --exclude='storage/logs/*' \
+            --exclude='storage/framework/cache/*' \
+            --exclude='storage/framework/sessions/*' \
+            --exclude='storage/framework/views/*' \
+            --exclude='storage/framework/testing/*' \
+            --exclude='bootstrap/cache/*' \
+            --exclude='public' \
+            --warning=no-file-changed \
+            .
+          
+          # Create archive for public assets only
+          tar -czf public-assets.tar.gz \
+            --warning=no-file-changed \
+            -C public .
 
-      # 1) Deploy Laravel core to /home/shendam/laravel
-      - name: Deploy core app via FTP/SFTP
+      # Upload archives via FTP (much faster and more reliable)
+      - name: Upload Laravel core archive
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -111,30 +134,14 @@ jobs:
           protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
           port: ${{ secrets.FTP_PORT || 21 }}
           local-dir: ./
-          # This is relative to your FTP root (/home/shendam)
-          # and will result in the app being stored at /home/shendam/laravel
           server-dir: /laravel/
-          exclude: |
-            **/.git*
-            **/.github/**
-            **/node_modules/**
-            **/tests/**
-            .env
-            env.local*
-            env.production*
-            **/storage/logs/**
-            **/storage/framework/cache/**
-            **/storage/framework/sessions/**
-            **/storage/framework/views/**
-            **/storage/framework/testing/**
-            **/bootstrap/cache/**
-          # Make the connection more stable on shared hosting
+          include: |
+            laravel-core.tar.gz
           max-conn: 1
-          timeout: 600000
-          retry-count: 3
+          timeout: 300000
+          retry-count: 5
 
-      # 2) Deploy ONLY public assets to public_html (web root)
-      - name: Deploy public assets via FTP/SFTP
+      - name: Upload public assets archive
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -142,15 +149,27 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
           port: ${{ secrets.FTP_PORT || 21 }}
-          local-dir: ./public/
-          # This maps directly to /home/shendam/public_html on the server
+          local-dir: ./
           server-dir: /public_html/
-          exclude: |
-            **/.git*
-            **/.github/**
+          include: |
+            public-assets.tar.gz
           max-conn: 1
-          timeout: 600000
-          retry-count: 3
+          timeout: 300000
+          retry-count: 5
+
+      # Trigger PHP deployment script to extract archives and run artisan commands
+      - name: Trigger deployment script
+        run: |
+          DEPLOY_URL="https://shendamlga.pl.gov.ng/deploy.php"
+          DEPLOY_TOKEN="${{ secrets.DEPLOY_TOKEN }}"
+          
+          if [ -n "$DEPLOY_TOKEN" ]; then
+            echo "Triggering deployment script..."
+            curl -f -s -X GET "${DEPLOY_URL}?token=${DEPLOY_TOKEN}&action=extract" || echo "Warning: Could not trigger deployment script. Please run it manually."
+          else
+            echo "DEPLOY_TOKEN not set. Skipping automatic deployment trigger."
+            echo "Please manually visit: ${DEPLOY_URL}?token=YOUR_TOKEN&action=extract"
+          fi
 
       - name: Notify deployment status
         if: always()
