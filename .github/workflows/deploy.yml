@@ -134,11 +134,13 @@ jobs:
             --exclude='storage/framework/testing/*' \
             --exclude='bootstrap/cache/*' \
             --exclude='public' \
+            --ignore-failed-read \
             --warning=no-file-changed \
             .
 
           echo "Creating public-assets.tar.gz ..."
           tar -czf public-assets.tar.gz \
+            --ignore-failed-read \
             --warning=no-file-changed \
             -C public .
 
