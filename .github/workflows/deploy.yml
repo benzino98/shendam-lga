@@ -119,14 +119,16 @@ jobs:
           fi
 
           echo "Creating laravel-core.tar.gz ..."
+          # Include env.production.example but exclude actual .env files
           tar -czf laravel-core.tar.gz \
             --exclude='.git' \
             --exclude='.github' \
             --exclude='node_modules' \
             --exclude='tests' \
             --exclude='.env' \
-            --exclude='env.local*' \
-            --exclude='env.production*' \
+            --exclude='.env.backup' \
+            --exclude='env.local.example' \
+            --exclude='env.production' \
             --exclude='storage/logs/*' \
             --exclude='storage/framework/cache/*' \
             --exclude='storage/framework/sessions/*' \

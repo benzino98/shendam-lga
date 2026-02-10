@@ -8,16 +8,29 @@ define('LARAVEL_START', microtime(true));
 /**
  * Resolve the Laravel base path.
  *
- * Locally, the app lives one level above `public` (../).
- * On production (cPanel), the core app is deployed to `/home/shendam/laravel`
- * while `public_html` contains only the `public` folder contents.
+ * This handles two deployment scenarios:
+ * 1. Local development: Laravel root is one level above `public` (../)
+ * 2. Production (cPanel): Laravel core is in `/home/USER/laravel` while
+ *    `public_html` contains only the `public` folder contents.
+ *
+ * The script checks both locations and uses the one that contains vendor/autoload.php
  */
-$laravelBasePath = realpath(__DIR__ . '/..') ?: (__DIR__ . '/..');
-$altBasePath     = realpath(__DIR__ . '/../laravel') ?: (__DIR__ . '/../laravel');
+$defaultPath = realpath(__DIR__ . '/..') ?: (__DIR__ . '/..');
+$cpanelPath  = realpath(__DIR__ . '/../laravel') ?: (__DIR__ . '/../laravel');
 
-// If the default vendor path does not exist, fall back to the /laravel directory
-if (! file_exists($laravelBasePath . '/vendor/autoload.php') && file_exists($altBasePath . '/vendor/autoload.php')) {
-    $laravelBasePath = $altBasePath;
+// Determine which path contains the Laravel installation
+$laravelBasePath = $defaultPath;
+
+// Check if default path has Laravel (local development)
+if (!file_exists($defaultPath . '/vendor/autoload.php')) {
+    // Check cPanel path (production)
+    if (file_exists($cpanelPath . '/vendor/autoload.php')) {
+        $laravelBasePath = $cpanelPath;
+    } else {
+        // Neither path works - this is a critical error
+        http_response_code(500);
+        die('Error: Laravel installation not found. Checked: ' . $defaultPath . ' and ' . $cpanelPath);
+    }
 }
 
 // Determine if the application is in maintenance mode...
