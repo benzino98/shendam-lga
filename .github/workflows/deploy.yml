@@ -182,13 +182,14 @@ jobs:
         run: |
           DEPLOY_URL="https://shendamlga.pl.gov.ng/deploy.php"
           DEPLOY_TOKEN="${{ secrets.DEPLOY_TOKEN }}"
-          
+
           if [ -n "$DEPLOY_TOKEN" ]; then
             echo "Triggering deployment script..."
-            curl -f -s -X GET "${DEPLOY_URL}?token=${DEPLOY_TOKEN}&action=extract" || echo "Warning: Could not trigger deployment script. Please run it manually."
+            # Use "deploy" so that the script BOTH extracts archives and runs artisan commands
+            curl -f -s -X GET "${DEPLOY_URL}?token=${DEPLOY_TOKEN}&action=deploy" || echo "Warning: Could not trigger deployment script. Please run it manually."
           else
             echo "DEPLOY_TOKEN not set. Skipping automatic deployment trigger."
-            echo "Please manually visit: ${DEPLOY_URL}?token=YOUR_TOKEN&action=extract"
+            echo "Please manually visit: ${DEPLOY_URL}?token=YOUR_TOKEN&action=deploy"
           fi
 
       - name: Notify deployment status

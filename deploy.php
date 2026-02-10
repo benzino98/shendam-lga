@@ -178,10 +178,34 @@ if ($action === 'deploy' || $action === 'commands') {
         echo "   Please ensure the core archive has been extracted first.\n";
         exit(1);
     }
-    
-    // Optional: uncomment this if you ever need to generate the app key on the server
-    // (ONLY run once, when .env is correctly configured and APP_KEY is empty).
-    // runCommand('Generate application key', "{$phpBinary} artisan key:generate", $projectRoot);
+
+    /**
+     * Ensure APP_KEY is set in the production .env.
+     *
+     * We only call `php artisan key:generate` if APP_KEY is missing or empty
+     * to avoid regenerating the key on every deploy.
+     */
+    $envPath = $projectRoot . '/.env';
+    if (is_readable($envPath)) {
+        $envContents = file_get_contents($envPath);
+        if ($envContents !== false) {
+            // Find the APP_KEY line if it exists
+            if (preg_match('/^APP_KEY\s*=\s*(.*)$/m', $envContents, $matches)) {
+                $rawValue = trim($matches[1], " \t\n\r\"'");
+                // Treat empty, "null", or "NULL" as missing
+                if ($rawValue === '' || strtolower($rawValue) === 'null') {
+                    runCommand('Generate application key', "{$phpBinary} artisan key:generate", $projectRoot);
+                }
+            } else {
+                // No APP_KEY line at all – generate one
+                runCommand('Generate application key', "{$phpBinary} artisan key:generate", $projectRoot);
+            }
+        }
+    } else {
+        echo "!!! WARNING: .env file not found at {$envPath}. Cannot auto-generate APP_KEY.\n";
+        echo "    Please create a production .env file on the server (with DB settings etc.)\n";
+        echo "    and leave APP_KEY empty so this script can run php artisan key:generate.\n\n";
+    }
     
     // 1) Run database migrations
     runCommand('Run database migrations', "{$phpBinary} artisan migrate --force", $projectRoot);
